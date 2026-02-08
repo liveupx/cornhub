@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CornHub – The World's Leading Corn Site</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0d0d0d;
+    --bg-secondary: #1b1b1b;
+    --bg-card: #252525;
+    --orange: #ff9000;
+    --orange-hover: #ffab3d;
+    --text-primary: #ffffff;
+    --text-secondary: #999999;
+    --text-muted: #666666;
+    --border: #333333;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: #000;
+    padding: 6px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .top-bar a { color: var(--text-muted); text-decoration: none; }
+  .top-bar a:hover { color: var(--text-primary); }
+
+  /* ── HEADER / NAV ── */
+  header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    gap: 16px;
+  }
+
+  /* Logo */
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .logo-corn {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+  .logo-hub {
+    background: var(--orange);
+    color: #000;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 1px 7px;
+    border-radius: 5px;
+    letter-spacing: -0.5px;
+  }
+
+  /* Search */
+  .search-bar {
+    flex: 1;
+    max-width: 500px;
+    display: flex;
+    position: relative;
+  }
+  .search-bar input {
+    width: 100%;
+    padding: 8px 14px;
+    background: #0d0d0d;
+    border: 1px solid #444;
+    border-radius: 4px 0 0 4px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+  }
+  .search-bar input:focus { border-color: var(--orange); }
+  .search-bar button {
+    background: var(--orange);
+    border: none;
+    color: #000;
+    padding: 0 16px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .search-bar button:hover { background: var(--orange-hover); }
+
+  /* Header buttons */
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .btn-upload {
+    background: var(--orange);
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-upload:hover { background: var(--orange-hover); }
+  .btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+  }
+  .btn-icon:hover { color: var(--text-primary); background: #333; }
+
+  .avatar {
+    width: 34px; height: 34px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #000;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* ── CATEGORY NAV ── */
+  .cat-nav {
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .cat-nav::-webkit-scrollbar { display: none; }
+  .cat-nav-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    padding: 0 20px;
+    gap: 0;
+  }
+  .cat-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: .2s;
+  }
+  .cat-nav a:hover, .cat-nav a.active {
+    color: var(--orange);
+    border-bottom-color: var(--orange);
+  }
+
+  /* ── PREMIUM BANNER ── */
+  .premium-banner {
+    background: linear-gradient(135deg, #1a1000 0%, #2a1800 50%, #1a1000 100%);
+    border: 1px solid #3a2800;
+    border-radius: 8px;
+    max-width: 1300px;
+    margin: 16px auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .premium-banner .text {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .premium-banner .corn-icon { font-size: 32px; }
+  .premium-banner h3 {
+    font-size: 15px;
+    color: var(--orange);
+    margin-bottom: 2px;
+  }
+  .premium-banner p {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .premium-banner .btn-premium {
+    background: var(--orange);
+    color: #000;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .premium-banner .btn-premium:hover { background: var(--orange-hover); }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 24px 0 14px;
+  }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-header a {
+    color: var(--text-muted);
+    font-size: 13px;
+    text-decoration: none;
+  }
+  .section-header a:hover { color: var(--orange); }
+
+  /* ── VIDEO GRID ── */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+  }
+
+  .video-card {
+    cursor: pointer;
+    transition: transform .15s;
+  }
+  .video-card:hover { transform: translateY(-3px); }
+
+  .thumb-wrap {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    background: var(--bg-card);
+  }
+  .thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .duration {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,.85);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .hd-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: var(--orange);
+    color: #000;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 5px;
+    border-radius: 3px;
+    letter-spacing: .5px;
+  }
+  .preview-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--orange);
+    width: 0%;
+    transition: width .3s;
+  }
+  .video-card:hover .preview-bar { width: 65%; }
+
+  .video-info { padding: 8px 2px; }
+  .video-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .video-card:hover .video-title { color: var(--orange); }
+  .video-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .channel-name {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+  .verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .verified::after {
+    content: '✓';
+    background: var(--orange);
+    color: #000;
+    font-size: 8px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+  }
+  .meta-dot { color: var(--text-muted); }
+  .rating { color: #4caf50; font-weight: 600; }
+
+  /* ── SIDEBAR TAGS ── */
+  .tags-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .tag {
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: .2s;
+  }
+  .tag:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* ── CHANNELS ── */
+  .channels-row {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 4px 0;
+    scrollbar-width: none;
+  }
+  .channels-row::-webkit-scrollbar { display: none; }
+  .channel-card {
+    flex-shrink: 0;
+    text-align: center;
+    cursor: pointer;
+    width: 100px;
+  }
+  .channel-card:hover .channel-avatar { border-color: var(--orange); }
+  .channel-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    transition: .2s;
+  }
+  .channel-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 30px 20px;
+    text-align: center;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 12px;
+  }
+  .footer-links a:hover { color: var(--orange); }
+  .footer-copy {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    max-width: 800px;
+    width: 100%;
+    overflow: hidden;
+    animation: modalIn .25s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-video {
+    aspect-ratio: 16/9;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    position: relative;
+  }
+  .play-btn {
+    position: absolute;
+    width: 70px; height: 70px;
+    background: rgba(255,144,0,.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: .2s;
+  }
+  .play-btn:hover { transform: scale(1.1); background: var(--orange); }
+  .play-btn::after {
+    content: '';
+    border: 16px solid transparent;
+    border-left: 24px solid #000;
+    margin-left: 6px;
+  }
+  .modal-body { padding: 16px 20px; }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .modal-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .modal-stats span { display: flex; align-items: center; gap: 4px; }
+  .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: rgba(0,0,0,.7);
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  .close-modal:hover { background: var(--orange); color: #000; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .header-inner { gap: 10px; }
+    .search-bar { max-width: 200px; }
+    .premium-banner { flex-direction: column; text-align: center; }
+    .video-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .header-actions .btn-upload span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <a href="#">🌐 EN</a>
+  <a href="#">Help</a>
+  <a href="#">Corn Safety</a>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <span class="logo-corn">Corn</span><span class="logo-hub">Hub</span>
+    </a>
+    <div class="search-bar">
+      <input type="text" placeholder="Search 6,942,069 ears of corn..." id="searchInput">
+      <button>🔍</button>
+    </div>
+    <div class="header-actions">
+      <button class="btn-upload" onclick="alert('🌽 Upload your finest corn content!')">
+        <span>⬆</span> <span>Upload</span>
+      </button>
+      <button class="btn-icon" title="Notifications">🔔</button>
+      <button class="btn-icon" title="Messages">✉️</button>
+      <div class="avatar">🌽</div>
+    </div>
+  </div>
+</header>
+
+<!-- CATEGORY NAV -->
+<nav class="cat-nav">
+  <div class="cat-nav-inner">
+    <a href="#" class="active">🏠 Home</a>
+    <a href="#">🔥 Trending</a>
+    <a href="#">⭐ Most Viewed</a>
+    <a href="#">🌟 Top Rated</a>
+    <a href="#">🆕 Newest</a>
+    <a href="#">🎬 Channels</a>
+    <a href="#">🏷 Categories</a>
+    <a href="#">🌽 CornHub Premium</a>
+    <a href="#">📸 Cornstars</a>
+    <a href="#">🎪 Community</a>
+  </div>
+</nav>
+
+<!-- PREMIUM BANNER -->
+<div class="premium-banner">
+  <div class="text">
+    <div class="corn-icon">🌽</div>
+    <div>
+      <h3>🔥 Try CornHub Premium – No Ads, Unlimited Buttering</h3>
+      <p>Get exclusive 4K corn content, early harvest access, and ad-free shucking. Start your free 7-day trial!</p>
+    </div>
+  </div>
+  <button class="btn-premium">GO PREMIUM</button>
+</div>
+
+<main>
+  <!-- POPULAR CHANNELS -->
+  <div class="section-header">
+    <h2>🌾 Popular Channels</h2>
+    <a href="#">See all →</a>
+  </div>
+  <div class="channels-row" id="channelsRow"></div>
+
+  <!-- TAGS -->
+  <div class="tags-row" id="tagsRow"></div>
+
+  <!-- TRENDING -->
+  <div class="section-header">
+    <h2>🔥 Trending Corn in Your Country</h2>
+    <a href="#">See all →</a>
+  </div>
+  <div class="video-grid" id="trendingGrid"></div>
+
+  <!-- RECOMMENDED -->
+  <div class="section-header">
+    <h2>👀 Recommended For You</h2>
+    <a href="#">See all →</a>
+  </div>
+  <div class="video-grid" id="recommendedGrid"></div>
+
+  <!-- RECENTLY FEATURED -->
+  <div class="section-header">
+    <h2>⭐ Recently Featured</h2>
+    <a href="#">See all →</a>
+  </div>
+  <div class="video-grid" id="featuredGrid"></div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">Blog</a>
+    <a href="#">Corn Safety</a>
+    <a href="#">Content Policy</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Accessibility</a>
+    <a href="#">Advertise</a>
+    <a href="#">Contact</a>
+    <a href="#">Careers (We're Planting!)</a>
+  </div>
+  <p class="footer-copy">© 2026 CornHub. All rights reserved. 🌽 Made with love for corn.</p>
+</footer>
+
+<!-- VIDEO MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal" style="position:relative;">
+    <button class="close-modal" onclick="closeModal()">×</button>
+    <div class="modal-video" id="modalEmoji">
+      <div class="play-btn" onclick="this.style.display='none'; this.parentElement.querySelector('.playing').style.display='flex'"></div>
+      <div class="playing" style="display:none; flex-direction:column; align-items:center; gap:8px;">
+        <span style="font-size:60px;" id="playEmoji">🌽</span>
+        <span style="font-size:14px; color:var(--orange); font-weight:700;">Now Playing...</span>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-stats">
+        <span id="modalViews"></span>
+        <span>👍 <span id="modalLikes"></span></span>
+        <span class="rating" id="modalRating"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const videos = [
+  { title: "Farmer Gets Caught With Massive Ear — You Won't Believe the Size 😳", views: "14.2M", likes: "98K", rating: "97%", duration: "12:34", emoji: "🌽", channel: "BigCornFarmer", hd: true },
+  { title: "Hot Buttered Corn on the Cob — Slow and Sensual Technique", views: "8.7M", likes: "72K", rating: "95%", duration: "8:21", emoji: "🧈", channel: "ButterLover69", hd: true },
+  { title: "First Time Shucking — She Had No Idea What She Was Doing", views: "21.3M", likes: "142K", rating: "98%", duration: "15:07", emoji: "🤭", channel: "CornVirgin", hd: true },
+  { title: "ASMR: Aggressive Corn Eating — NO TALKING 🤫", views: "5.1M", likes: "38K", rating: "91%", duration: "22:15", emoji: "🎧", channel: "ASMRFarm" },
+  { title: "Naughty Cornfield Adventures — Caught Between the Rows", views: "11.8M", likes: "89K", rating: "96%", duration: "10:45", emoji: "🌾", channel: "FieldTrips", hd: true },
+  { title: "Thick, Juicy Corn Chowder — Step by Step Instructions", views: "3.4M", likes: "28K", rating: "94%", duration: "18:33", emoji: "🍲", channel: "ChowderDaddy" },
+  { title: "POV: You're a Corn Kernel Going Through the Popper 🍿", views: "45.2M", likes: "312K", rating: "99%", duration: "3:14", emoji: "🍿", channel: "PopCornKing", hd: true },
+  { title: "Two Farmers One Cornfield — Things Get Intense at Harvest", views: "7.6M", likes: "56K", rating: "93%", duration: "14:28", emoji: "👨‍🌾", channel: "DualHarvest" },
+  { title: "Step-Farmer Teaches Step-Son How to Properly Husk 🌽", views: "32.1M", likes: "201K", rating: "97%", duration: "11:52", emoji: "👨‍👦", channel: "FamilyFarm", hd: true },
+  { title: "Barely Legal — This Corn Was Picked ONE Day Before Regulations", views: "18.9M", likes: "134K", rating: "96%", duration: "7:38", emoji: "⚖️", channel: "LegalCorn" },
+  { title: "Behind the Scenes at a REAL Corn Processing Plant 😱", views: "6.3M", likes: "47K", rating: "92%", duration: "25:11", emoji: "🏭", channel: "IndustrialCorn" },
+  { title: "Exotic Multicolored Corn — Nature's Most Beautiful Creation", views: "9.2M", likes: "81K", rating: "98%", duration: "6:49", emoji: "🌈", channel: "RainbowHarvest", hd: true },
+  { title: "GONE WRONG: Electric Corn Husker Strips Everything Off 😱", views: "28.4M", likes: "195K", rating: "95%", duration: "4:20", emoji: "⚡", channel: "MachineFarm", hd: true },
+  { title: "Corn Oil Massage — Full Body Glazing Tutorial", views: "4.8M", likes: "35K", rating: "90%", duration: "19:55", emoji: "💆", channel: "GlazeQueen" },
+  { title: "The Forbidden Corn Maze — Nobody Makes It to the End", views: "15.7M", likes: "112K", rating: "97%", duration: "13:22", emoji: "🌀", channel: "MazeRunner", hd: true },
+  { title: "Amateur Farmer's FIRST Harvest — Raw & Unfiltered", views: "2.9M", likes: "21K", rating: "89%", duration: "28:40", emoji: "🔰", channel: "NewbieFarmer" },
+  { title: "Dirty Talk About Soil pH Levels — Gets Really Deep 💦", views: "7.1M", likes: "53K", rating: "94%", duration: "16:18", emoji: "🌱", channel: "SoilScience", hd: true },
+  { title: "Compilation: Best Corn Pops of 2025 — Ultimate Satisfaction", views: "41.6M", likes: "287K", rating: "99%", duration: "32:00", emoji: "🎬", channel: "BestOfCorn", hd: true },
+];
+
+const channels = [
+  { name: "BigCornFarmer", emoji: "👨‍🌾" },
+  { name: "ButterLover69", emoji: "🧈" },
+  { name: "PopCornKing", emoji: "🍿" },
+  { name: "FamilyFarm", emoji: "🏡" },
+  { name: "RainbowHarvest", emoji: "🌈" },
+  { name: "MazeRunner", emoji: "🌀" },
+  { name: "SoilScience", emoji: "🌱" },
+  { name: "ChowderDaddy", emoji: "🍲" },
+  { name: "BestOfCorn", emoji: "🏆" },
+  { name: "CornVirgin", emoji: "🌾" },
+  { name: "MachineFarm", emoji: "⚡" },
+  { name: "GlazeQueen", emoji: "💆" },
+];
+
+const tags = [
+  "Sweet Corn", "Butter", "Popcorn", "ASMR", "Harvest", "Organic", "GMO-Free",
+  "Cornfield", "Shucking", "Grilled", "Maze", "Elote", "Creamed", "Husking",
+  "Baby Corn", "Kettle Corn", "Cornbread", "Multicolored", "Farm Fresh", "Chowder"
+];
+
+// Random colors for thumbnails
+function getGradient(i) {
+  const gradients = [
+    'linear-gradient(135deg, #2d1b00 0%, #4a3000 40%, #1a1200 100%)',
+    'linear-gradient(135deg, #1b2d00 0%, #304a00 40%, #121a00 100%)',
+    'linear-gradient(135deg, #2d2400 0%, #4a3d00 40%, #1a1700 100%)',
+    'linear-gradient(135deg, #002d1b 0%, #004a30 40%, #001a12 100%)',
+    'linear-gradient(135deg, #2d0024 0%, #4a003d 40%, #1a0017 100%)',
+    'linear-gradient(135deg, #00172d 0%, #00274a 40%, #00101a 100%)',
+  ];
+  return gradients[i % gradients.length];
+}
+
+function createVideoCard(v, i) {
+  return `
+    <div class="video-card" onclick="openModal(${i})">
+      <div class="thumb-wrap">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;background:${getGradient(i)};">
+          ${v.emoji}
+        </div>
+        <span class="duration">${v.duration}</span>
+        ${v.hd ? '<span class="hd-badge">4K</span>' : ''}
+        <div class="preview-bar"></div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${v.title}</div>
+        <div class="video-meta">
+          <span class="channel-name verified">${v.channel}</span>
+          <span class="meta-dot">•</span>
+          <span>${v.views} views</span>
+          <span class="meta-dot">•</span>
+          <span class="rating">👍 ${v.rating}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Populate grids
+const trending = document.getElementById('trendingGrid');
+const recommended = document.getElementById('recommendedGrid');
+const featured = document.getElementById('featuredGrid');
+
+const shuffled = [...videos].sort(() => Math.random() - 0.5);
+trending.innerHTML = shuffled.slice(0,6).map((v,i) => createVideoCard(v,videos.indexOf(v))).join('');
+recommended.innerHTML = shuffled.slice(6,12).map((v,i) => createVideoCard(v,videos.indexOf(v))).join('');
+featured.innerHTML = shuffled.slice(12,18).map((v,i) => createVideoCard(v,videos.indexOf(v))).join('');
+
+// Channels
+document.getElementById('channelsRow').innerHTML = channels.map(c => `
+  <div class="channel-card">
+    <div class="channel-avatar">${c.emoji}</div>
+    <div class="channel-label">${c.name}</div>
+  </div>
+`).join('');
+
+// Tags
+document.getElementById('tagsRow').innerHTML = tags.map(t =>
+  `<span class="tag">${t}</span>`
+).join('');
+
+// Modal
+function openModal(i) {
+  const v = videos[i];
+  document.getElementById('modalTitle').textContent = v.title;
+  document.getElementById('modalViews').textContent = '👁 ' + v.views + ' views';
+  document.getElementById('modalLikes').textContent = v.likes;
+  document.getElementById('modalRating').textContent = v.rating;
+  document.getElementById('playEmoji').textContent = v.emoji;
+  document.getElementById('modalEmoji').style.background = getGradient(i);
+  const modal = document.getElementById('modal');
+  // Reset play state
+  modal.querySelector('.play-btn').style.display = 'flex';
+  modal.querySelector('.playing').style.display = 'none';
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Search filter
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.video-card').forEach(card => {
+    const title = card.querySelector('.video-title').textContent.toLowerCase();
+    card.style.display = title.includes(q) || !q ? '' : 'none';
+  });
+});
+</script>
+</body>
+</html>
